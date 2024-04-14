@@ -49,8 +49,7 @@ public class DiaDia {
 		String istruzione; 
 		Scanner scannerDiLinee;
 		
-		IOConsole.mostraMessaggio(MESSAGGIO_BENVENUTO);
-		scannerDiLinee = new Scanner(System.in);		
+		IOConsole.mostraMessaggio(MESSAGGIO_BENVENUTO);	
 		do		
 			istruzione = IOConsole.leggiRiga();
 		while (!processaIstruzione(istruzione));
