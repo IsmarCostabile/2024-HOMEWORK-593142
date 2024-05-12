@@ -3,6 +3,8 @@ package it.uniroma3.diadia.comandi;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.util.Set;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -10,9 +12,9 @@ import org.junit.Test;
 import it.uniroma3.diadia.IO;
 import it.uniroma3.diadia.IOConsole;
 import it.uniroma3.diadia.Partita;
+import it.uniroma3.diadia.ambienti.Labirinto;
+import it.uniroma3.diadia.ambienti.LabirintoBuilder;
 import it.uniroma3.diadia.attrezzi.Attrezzo;
-import it.uniroma3.diadia.comandi.Comando;
-import it.uniroma3.diadia.comandi.ComandoPrendi;
 
 public class ComandoPrendiTest {
 
@@ -22,10 +24,17 @@ public class ComandoPrendiTest {
 	private Attrezzo attrezzoNull;
 	private Comando comando;
 	private IO io;
+	Labirinto labirinto;
 	
 	@Before
 	public void setUp() throws Exception {
-		partita = new Partita();
+		labirinto = new LabirintoBuilder()
+				.addStanzaIniziale("Atrio")
+				.addAttrezzo("martello", 3)
+				.addStanzaVincente("Biblioteca")
+				.addAdiacenza("Atrio", "Biblioteca", "nord")
+				.getLabirinto();
+		partita = new Partita(labirinto);
 		attrezzo = new Attrezzo("martello", 2);
 		attrezzoPesante = new Attrezzo("incudine", 11);
 		attrezzoNull = null;
@@ -40,13 +49,11 @@ public class ComandoPrendiTest {
 	}
 	
 	public boolean attrezzoPresente(String s) {
-		Attrezzo[] array = partita.getStanzaCorrente().getAttrezzi();
-		for(Attrezzo a : array) {
-			if(a != null && s.equals(a.getNome()))
-					return true;
+		//Set<Attrezzo> set = partita.getStanzaCorrente().getAttrezzi();
+		if(partita.getStanzaCorrente().getAttrezzo(s)==null)
+			return false;
+		return true;
 		}
-		return false;
-	}
 	
 	@Test
 	public void testAttrezzoPreso() {
@@ -55,6 +62,7 @@ public class ComandoPrendiTest {
 		comando.esegui(partita);
 		assertFalse(attrezzoPresente("martello"));
 	}
+	
 	@Test
 	public void testAttrezzoNonPresente() {
 		comando.setParametro("martello");

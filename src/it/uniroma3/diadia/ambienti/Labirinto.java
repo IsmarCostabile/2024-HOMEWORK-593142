@@ -1,9 +1,12 @@
 package it.uniroma3.diadia.ambienti;
+
 import it.uniroma3.diadia.attrezzi.Attrezzo;
 
 public class Labirinto {
+	
 	private Stanza stanzaCorrente;
 	private Stanza stanzaVincente;
+	
     /**
      * Crea tutte le stanze e le porte di collegamento
      */
@@ -48,6 +51,10 @@ public class Labirinto {
     
     public Stanza getStanzaVincente() {
 		return stanzaVincente;
+	}
+    
+    public void setStanzaVincente(Stanza vincente) {
+    	this.stanzaVincente = vincente;
 	}
 
 	public void setStanzaCorrente(Stanza stanzaCorrente) {

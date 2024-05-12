@@ -34,13 +34,13 @@ public class StanzaMagicaProtected extends StanzaProtected {
 	@Override
 	public boolean addAttrezzo(Attrezzo attrezzo) {
 		if (this.numeroAttrezzi < NUMERO_MASSIMO_ATTREZZI ) {
-			this.attrezzi[numeroAttrezzi] = attrezzo;
+			this.string2attrezzo.put(attrezzo.getNome(), attrezzo);
 			this.numeroAttrezzi++;
 			return true;
 		}
 		else if(this.contatoreAttrezziPosati>this.sogliaMagica){
 			this.modificaAttrezzo(attrezzo);
-			this.attrezzi[numeroAttrezzi] = attrezzo;
+			this.string2attrezzo.put(attrezzo.getNome(), attrezzo);
 			this.numeroAttrezzi++;
 			return true;
 		}

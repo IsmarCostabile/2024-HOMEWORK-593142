@@ -6,13 +6,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import it.uniroma3.diadia.IO;
 import it.uniroma3.diadia.IOConsole;
-import it.uniroma3.diadia.comandi.Comando;
-import it.uniroma3.diadia.comandi.ComandoFine;
-import it.uniroma3.diadia.comandi.ComandoNonValido;
-import it.uniroma3.diadia.comandi.ComandoVai;
-import it.uniroma3.diadia.comandi.FabbricaDiComandiFisarmonica;
+import it.uniroma3.diadia.IO;
 
 public class FabbricaDiComandiFisarmonicaTest {
 
