@@ -3,7 +3,7 @@ package it.uniroma3.diadia.comandi;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.util.Set;
+import java.util.Scanner;
 
 import org.junit.After;
 import org.junit.Before;
@@ -13,7 +13,6 @@ import it.uniroma3.diadia.IO;
 import it.uniroma3.diadia.IOConsole;
 import it.uniroma3.diadia.Partita;
 import it.uniroma3.diadia.ambienti.Labirinto;
-import it.uniroma3.diadia.ambienti.LabirintoBuilder;
 import it.uniroma3.diadia.attrezzi.Attrezzo;
 
 public class ComandoPrendiTest {
@@ -28,18 +27,19 @@ public class ComandoPrendiTest {
 	
 	@Before
 	public void setUp() throws Exception {
-		labirinto = new LabirintoBuilder()
-				.addStanzaIniziale("Atrio")
-				.addAttrezzo("martello", 3)
-				.addStanzaVincente("Biblioteca")
-				.addAdiacenza("Atrio", "Biblioteca", "nord")
-				.getLabirinto();
+		 labirinto = Labirinto.newBuilder("labirinto2.txt").getLabirinto();
+//				new LabirintoBuilder()
+//				.addStanzaIniziale("Atrio")
+//				.addAttrezzo("martello", 3)
+//				.addStanzaVincente("Biblioteca")
+//				.addAdiacenza("Atrio", "Biblioteca", "nord")
+//				.getLabirinto();
 		partita = new Partita(labirinto);
 		attrezzo = new Attrezzo("martello", 2);
 		attrezzoPesante = new Attrezzo("incudine", 11);
 		attrezzoNull = null;
 		comando = new ComandoPrendi();
-		io = new IOConsole();
+		io = new IOConsole(new Scanner(System.in));
 		comando.setIo(io);
 	}
 

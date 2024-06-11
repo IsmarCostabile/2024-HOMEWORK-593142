@@ -7,11 +7,6 @@ public class IOSimulator implements IO {
 
 	private List<String> righeLette;
 	private int indiceRigheLette;
-	
-	private List<String> messaggiProdotti;
-	private int indiceMessaggiProdotti;
-	private int indiceMessaggiMostrati;
-
 
 	public List<String> getMessaggiProdotti() {
 		return messaggiProdotti;
@@ -20,6 +15,10 @@ public class IOSimulator implements IO {
 	public void setMessaggiProdotti(List<String> messaggiProdotti) {
 		this.messaggiProdotti = messaggiProdotti;
 	}
+
+	private List<String> messaggiProdotti;
+	private int indiceMessaggiProdotti;
+	private int indiceMessaggiMostrati;
 
 	public IOSimulator(List<String> righeDaLeggere) {
 		this.righeLette = righeDaLeggere;

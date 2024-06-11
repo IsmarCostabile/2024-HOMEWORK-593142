@@ -1,80 +1,72 @@
 package it.uniroma3.diadia.ambienti;
-
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import it.uniroma3.diadia.attrezzi.Attrezzo;
 
-/**
- * Classe Stanza - una stanza in un gioco di ruolo.
- * Una stanza e' un luogo fisico nel gioco.
- * E' collegata ad altre stanze attraverso delle uscite.
- * Ogni uscita e' associata ad una direzione.
- * 
- * @author docente di POO 
- * @see Attrezzo
- * @version base
- */
 
 public class StanzaProtected {
-	
-	static final protected int NUMERO_MASSIMO_DIREZIONI = 4;
+
+	protected static final  int NUMERO_MASSIMO_DIREZIONI = 4;
 	protected static final int NUMERO_MASSIMO_ATTREZZI = 10;
 
-	private String nome;
-	
-	protected Map<String, Attrezzo> string2attrezzo;
+	protected String nome;
+	protected Map<String, Attrezzo> nome2attrezzi;
 	protected int numeroAttrezzi;
 
-	protected Map<String, StanzaProtected> string2stanza;
+	protected Map<String, StanzaProtected> direzioni2stanze;
 	protected int numeroStanzeAdiacenti;
-	
-	/**
-	 * Crea una stanza. Non ci sono stanze adiacenti, non ci sono attrezzi.
-	 * @param nome il nome della stanza
-	 */
 	
 	public StanzaProtected(String nome) {
 		this.nome = nome;
 		this.numeroStanzeAdiacenti = 0;
 		this.numeroAttrezzi = 0;
+		this.direzioni2stanze = new HashMap<>();
+		this.nome2attrezzi = new HashMap<>();
 	}
 
-	/**
-	 * Imposta una stanza adiacente.
-	 *
-	 * @param direzione direzione in cui sara' posta la stanza adiacente.
-	 * @param stanza stanza adiacente nella direzione indicata dal primo parametro.
-	 */
-	public boolean impostaStanzaAdiacente(String direzione, StanzaProtected stanza) {
-		
+	public List<StanzaProtected> getStanzeAdiacenti() {
+		return (List<StanzaProtected>) direzioni2stanze.values();
+	}
+
+	public void setStanzeAdiacenti(Map<String, StanzaProtected> stanzeAdiacenti) {
+		this.direzioni2stanze = stanzeAdiacenti;
+	}
+
+	public int getNumeroStanzeAdiacenti() {
+		return numeroStanzeAdiacenti;
+	}
+
+	public void setNumeroStanzeAdiacenti(int numeroStanzeAdiacenti) {
+		this.numeroStanzeAdiacenti = numeroStanzeAdiacenti;
+	}
+
+	public int getNumeroAttrezziPossibili() {
+		return NUMERO_MASSIMO_ATTREZZI-this.numeroAttrezzi;
+	}
+
+	public void impostaStanzaAdiacente(String direzione, StanzaProtected stanza) {
 		boolean aggiornato = false;
-		
-		if(this.string2stanza.containsKey(direzione)) {
-			this.string2stanza.put(direzione, stanza);
+
+		if (direzioni2stanze.containsKey(direzione)) {
+			this.direzioni2stanze.put(direzione,stanza);
 			aggiornato = true;
 		}
-		
-		if(aggiornato == false && this.numeroStanzeAdiacenti < NUMERO_MASSIMO_DIREZIONI) {
-			this.string2stanza.put(direzione, stanza);
-		}
-		
-		return aggiornato;
-		
+		if (!aggiornato)
+			if (this.numeroStanzeAdiacenti < NUMERO_MASSIMO_DIREZIONI) {
+				this.direzioni2stanze.put(direzione,stanza);
+				this.numeroStanzeAdiacenti++;
+			}
 	}
 
-	/**
-	 * Restituisce la stanza adiacente nella direzione specificata
-	 * @param direzione
-	 */
 	public StanzaProtected getStanzaAdiacente(String direzione) {
-
-		if(this.string2stanza.containsKey(direzione)) {
-			return this.string2stanza.get(direzione);
-		}
-		
-		return null;
-
+		StanzaProtected stanza = null;
+		if (this.direzioni2stanze.containsKey(direzione))
+			stanza = this.direzioni2stanze.get(direzione);
+		return stanza;
 	}
 
 	/**
@@ -97,8 +89,8 @@ public class StanzaProtected {
 	 * Restituisce la collezione di attrezzi presenti nella stanza.
 	 * @return la collezione di attrezzi nella stanza.
 	 */
-	public Set<Attrezzo> getAttrezzi() {
-		return (Set<Attrezzo>) this.string2attrezzo.values();
+	public Collection<Attrezzo> getAttrezzi() {
+		return this.nome2attrezzi.values();
 	}
 
 	/**
@@ -107,23 +99,14 @@ public class StanzaProtected {
 	 * @return true se riesce ad aggiungere l'attrezzo, false atrimenti.
 	 */
 	public boolean addAttrezzo(Attrezzo attrezzo) {
-		
-		boolean aggiornato = false;
-		
-		// Caso sovrascrizione
-		if(this.string2attrezzo.containsKey(attrezzo.getNome())) {
-			this.string2attrezzo.put(attrezzo.getNome(), attrezzo);
-			aggiornato = true;
+		if (attrezzo != null && this.numeroAttrezzi < NUMERO_MASSIMO_ATTREZZI) {
+			this.nome2attrezzi.put(attrezzo.getNome(), attrezzo);
+			this.numeroAttrezzi++;
+			return true;
 		}
-		
-		// Caso nuova entrata
-		if(aggiornato == false && this.numeroAttrezzi < NUMERO_MASSIMO_ATTREZZI) {
-			this.string2attrezzo.put(attrezzo.getNome(), attrezzo);
-			aggiornato = true;
+		else {
+			return false;
 		}
-		
-		return aggiornato;
-		
 	}
 
 	/**
@@ -135,9 +118,9 @@ public class StanzaProtected {
 		StringBuilder risultato = new StringBuilder();
 		risultato.append(this.nome);
 		risultato.append("\nUscite: ");
-		risultato.append(this.string2stanza.keySet().toString());
+		risultato.append(this.getDirezioni().toString());
 		risultato.append("\nAttrezzi nella stanza: ");
-		risultato.append(this.string2attrezzo.keySet().toString());
+		risultato.append(this.getAttrezzi().toString());
 		return risultato.toString();
 	}
 
@@ -145,11 +128,8 @@ public class StanzaProtected {
 	 * Controlla se un attrezzo esiste nella stanza (uguaglianza sul nome).
 	 * @return true se l'attrezzo esiste nella stanza, false altrimenti.
 	 */
-	public boolean hasAttrezzo(String nomeAttrezzo) {
-		if(this.string2attrezzo.containsKey(nomeAttrezzo)) {
-			return true;
-		}
-		return false;
+	public boolean hasAttrezzo(String nomeAttrezzo) {	
+		return this.nome2attrezzi.containsKey(nomeAttrezzo);
 	}
 
 	/**
@@ -159,11 +139,11 @@ public class StanzaProtected {
 	 * 		   null se l'attrezzo non e' presente.
 	 */
 	public Attrezzo getAttrezzo(String nomeAttrezzo) {
-		Attrezzo a = null;
-		if(this.string2attrezzo.containsKey(nomeAttrezzo)) {
-			a = this.string2attrezzo.get(nomeAttrezzo);
-		}
-		return a;
+		Attrezzo attrezzoCercato;
+		attrezzoCercato = null;
+		if (this.nome2attrezzi.containsKey(nomeAttrezzo))
+			attrezzoCercato = this.nome2attrezzi.get(nomeAttrezzo);
+		return attrezzoCercato;	
 	}
 
 	/**
@@ -172,53 +152,19 @@ public class StanzaProtected {
 	 * @return true se l'attrezzo e' stato rimosso, false altrimenti
 	 */
 	public boolean removeAttrezzo(Attrezzo attrezzo) {
-		
-		if(attrezzo == null) {
-			return false;
-		}
-		
-		boolean removed = false;
-		
-		if(this.string2attrezzo.containsKey(attrezzo.getNome())) {
-			this.string2attrezzo.remove(attrezzo.getNome());
-			removed = true;
-		}
-		
-		return removed;
-		
+	    if(attrezzo != null) {
+	        this.nome2attrezzi.remove(attrezzo.getNome());
+	        return true;
+	    } else {
+	        return false;
+	    }
 	}
+
 
 
 	public Set<String> getDirezioni() {
-		return this.string2stanza.keySet();
+
+		return direzioni2stanze.keySet();
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 
 }

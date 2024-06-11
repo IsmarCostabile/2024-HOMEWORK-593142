@@ -10,6 +10,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import it.uniroma3.diadia.Configuratore;
 import it.uniroma3.diadia.DiaDia;
 import it.uniroma3.diadia.IOSimulator;
 import it.uniroma3.diadia.fixture.Fixture;
@@ -28,12 +29,12 @@ public class ComandoFineTest {
 	}
 
 	@Test
-	public void testPartitaConComandoFine() {
+	public void testPartitaConComandoFine() throws Exception {
 		righeDaLeggere.add("fine");
 
 		IOSimulator io = Fixture.creaSimulazionePartitaEGiocaEasy(righeDaLeggere);
 		assertTrue(io.hasNextMessaggio());
-		assertEquals(DiaDia.MESSAGGIO_BENVENUTO, io.nextMessaggio());
+		assertEquals(Configuratore.getMessaggioBenvenuto(), io.nextMessaggio());
 		assertTrue(io.hasNextMessaggio());
 		assertEquals(ComandoFine.MESSAGGIO_FINE, io.nextMessaggio());
 

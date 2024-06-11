@@ -2,6 +2,8 @@ package it.uniroma3.diadia.comandi;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.Scanner;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,7 +19,7 @@ public class FabbricaDiComandiFisarmonicaTest {
 	
 	@Before
 	public void setUp() throws Exception {
-		io = new IOConsole();
+		io = new IOConsole(new Scanner(System.in));
 		fabbrica = new FabbricaDiComandiFisarmonica(io);
 	}
 
